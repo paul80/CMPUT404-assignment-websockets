@@ -121,10 +121,21 @@ function getPosition(e) {
 	}
 }
 
+
+//THis is needed, get in here but never subscribe for some reason.
 function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just modified!
+
+    var ent= {};
+    ent[entity]=data;
+    socket.send(JSON.stringify(ent));
+
+    //debug crap
+    console.log("add entity stuff here");
+    console.log(ent);
+
 }
 var counter = 0;
 function addEntityWithoutName(data) {
@@ -250,10 +261,12 @@ function update() {
 
 
 function wsSetup() {
+    console.log("IN wsSETUP");
     var url = "ws://"+host+"/subscribe";   
     socket = new WebSocket(url);
     socket.onopen = function() {
         //XXX: TODO What are you going to do here?
+        //I dunno??
     };
     socket.onerror = function(msg) {
         debug("WebSocket Error:" + msg.data);
@@ -261,7 +274,21 @@ function wsSetup() {
     socket.onmessage = function(msg) {  
         try {
             debug("WebSocket Recv:" + msg.data);
-            //XXX: TODO What are you going to do here?            
+            //XXX: TODO What are you going to do here? 
+
+            //From the sample code and guesses
+            var message= JSON.parse(msg.data);
+            //Get entity from message and data from message 
+            // and add it to the world and draw next frame??
+            console.log("IN socket.onmessage")
+            for (entity in message) {
+                var data= message[entity];
+                world[entity]= data;
+                console.debug(data);
+                drawNextFrame();
+            }
+
+                      
         } catch (e) {
             alert("socket on message: " + e);
         }
@@ -269,8 +296,6 @@ function wsSetup() {
 }
 
 wsSetup();
-
-
 
 
 // 30 frames per second

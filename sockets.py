@@ -113,7 +113,7 @@ def hello():
 #         myWorld.update_listeners(ent)
 
 def read_ws(ws,client):
-    #some greenlit stuff ...
+    #some greenlit stuff ..., should be fine, just bloody subscribe
     try:
         while True:
             msg=ws.receive()
@@ -148,6 +148,8 @@ def subscribe_socket(ws):
     finally:
         clients.remove(client)
         gevent.kill(g)
+        print("IN Subscribe socket")
+
 # def subscribe_socket(ws):
 #     '''Fufill the websocket URL of /subscribe, every update notify the
 #        websocket and read updates from the websocket '''
