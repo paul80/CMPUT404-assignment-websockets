@@ -101,19 +101,8 @@ def hello():
     '''Return something coherent here.. perhaps redirect to /static/index.html '''
     return flask.redirect("/static/index.html")
 
-
-# def read_ws(ws,client):
-#     '''A greenlet function that reads from the websocket and updates the world'''
-#     msg = ws.receive()
-#     print "WS RECV: %s" % msg
-#     packet = json.loads(msg)
-#     for ent in packet:
-#         for key in packet[ent]:
-#             myWorld.update(ent, key, packet[ent][key])
-#         myWorld.update_listeners(ent)
-
 def read_ws(ws,client):
-    #some greenlit stuff ..., should be fine, just bloody subscribe
+#     '''A greenlet function that reads from the websocket and updates the world'''
     try:
         while True:
             msg=ws.receive()
@@ -135,7 +124,8 @@ def read_ws(ws,client):
 
 @sockets.route('/subscribe')
 def subscribe_socket(ws):
-    '''Fulfill ...'''
+#     '''Fufill the websocket URL of /subscribe, every update notify the
+#        websocket and read updates from the websocket '''
     client= Client()
     clients.append(client)
     g= gevent.spawn(read_ws,ws,client)
@@ -149,23 +139,6 @@ def subscribe_socket(ws):
         clients.remove(client)
         gevent.kill(g)
         print("IN Subscribe socket")
-
-# def subscribe_socket(ws):
-#     '''Fufill the websocket URL of /subscribe, every update notify the
-#        websocket and read updates from the websocket '''
-   
-#    #add_set_listener
-#     myWorld.add_set_listener(ws)
-
-#     ws.send(json.dumps(myWorld.world()))
-#     print "Subscribing"
-#     while True:
-#         try:
-#             read_ws(ws,None)
-#         except:
-#             ws.close()
-#             myWorld.listeners.remove(ws)
-#             break
 
 def flask_post_json():
     '''Ah the joys of frameworks! They do so much work for you
