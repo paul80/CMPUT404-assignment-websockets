@@ -57,3 +57,7 @@ Contributors
 
 * Mark Galloway
 * Abram Hindle
+
+CMPUT 410 Winter 2015 Assignment 5 Submission
+=============================================
+Contributors: Paul Nhan (pnhan), Jessica Surya (jsurya)
